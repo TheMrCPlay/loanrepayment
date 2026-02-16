@@ -1,0 +1,33 @@
+# `/.gitignore`
+
+### Symfony ###
+/var/
+/var/*
+
+### Composer ###
+/vendor/
+/composer.lock
+
+### Environment ###
+/.env
+!.env.*      # keep `.env.local`, `.env.test`, etc. tracked if you want
+
+### PHPUnit ###
+/.phpunit.result.cache
+
+### PHP CS Fixer ###
+/.php-cs-fixer.cache
+
+### PHPStan ###
+/phpstan.neon.local
+/phpstan.neon.dist
+
+### IDE/editor ###
+/.idea/
+/.vscode/
+/*.iml
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###

@@ -1,0 +1,63 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: loanrepayment-postgres
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret123
+      POSTGRES_DB: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - loanrepayment-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PHP-FPM Application
+  php81:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loanrepayment-php
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ./var/log:/app/var/log
+    environment:
+      DATABASE_URL: postgresql://app:secret123@postgres:5432/app?serverVersion=16&charset=utf8
+      APP_ENV: dev
+      APP_SECRET: f961c994f994ef220843174e58d900ba
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - loanrepayment-network
+    expose:
+      - "9000"
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: loanrepayment-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/app
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php81
+    networks:
+      - loanrepayment-network
+
+volumes:
+  postgres_data:
+
+networks:
+  loanrepayment-network:
+    driver: bridge

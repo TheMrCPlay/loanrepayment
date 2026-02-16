@@ -1,0 +1,102 @@
+{
+  "info": {
+    "name": "Loan Repayment API",
+    "description": "Collection для тестирования API платежей",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Payment API",
+      "item": [
+        {
+          "name": "POST Single Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Иван\",\n  \"lastname\": \"Иванов\",\n  \"paymentDate\": \"2024-02-16T15:30:00+00:00\",\n  \"amount\": \"150.99\",\n  \"description\": \"Платеж LN20240216\",\n  \"refId\": \"a1b2c3d4-e5f6-47g8-h9i0-j1k2l3m4n5o6\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost/api/payment/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "payment",
+                ""
+              ]
+            },
+            "description": "Загрузить один платеж"
+          }
+        },
+        {
+          "name": "POST Payment with Different Amount",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Петр\",\n  \"lastname\": \"Петров\",\n  \"paymentDate\": \"2024-02-16T16:45:00+00:00\",\n  \"amount\": \"250.50\",\n  \"description\": \"Платеж LN20240216\",\n  \"refId\": \"b2c3d4e5-f6g7-48h9-i0j1-k2l3m4n5o6p7\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost/api/payment/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "payment",
+                ""
+              ]
+            },
+            "description": "Загрузить платеж другого пользователя"
+          }
+        },
+        {
+          "name": "POST Duplicate Payment (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Иван\",\n  \"lastname\": \"Иванов\",\n  \"paymentDate\": \"2024-02-16T15:30:00+00:00\",\n  \"amount\": \"150.99\",\n  \"description\": \"Платеж LN20240216\",\n  \"refId\": \"a1b2c3d4-e5f6-47g8-h9i0-j1k2l3m4n5o6\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost/api/payment/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "payment",
+                ""
+              ]
+            },
+            "description": "Попытка загрузить дублирующийся платеж (должна вернуться ошибка 409)"
+          }
+        }
+      ]
+    }
+  ]
+}
+

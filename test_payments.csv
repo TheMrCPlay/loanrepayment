@@ -1,0 +1,4 @@
+firstname,lastname,paymentDate,amount,description,refId
+Lorem,Ipsum,2024-02-16T17:20:00+00:00,45.25,LN20221212,csv-test-001
+Test,User,2024-02-16T18:15:00+00:00,60.00,LN12345678,csv-test-002
+Another,Person,2024-02-16T19:00:00+00:00,75.50,LN55522533,csv-test-003
