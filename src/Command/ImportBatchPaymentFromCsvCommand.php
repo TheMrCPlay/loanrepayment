@@ -4,8 +4,6 @@ namespace App\Command;
 
 use App\Application\Dto\IncomingPaymentDto;
 use App\Application\Notification\Message\FailedPaymentsReport;
-use App\Application\Notification\Message\SendEmail;
-use App\Application\Notification\NotificationDispatcher;
 use App\Application\Service\PaymentIngestionService;
 use App\Domain\Exception\DuplicatePaymentException;
 use App\Domain\Exception\InvalidDateException;
@@ -18,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsCommand(
     name: 'import',
@@ -29,6 +28,7 @@ class ImportBatchPaymentFromCsvCommand extends Command
         private readonly PaymentIngestionService $paymentIngestionService,
         private readonly MessageBusInterface $messageBus,
         private readonly LoggerInterface $logger,
+        private readonly SerializerInterface $serializer
     ) {
         parent::__construct();
     }
@@ -52,12 +52,10 @@ class ImportBatchPaymentFromCsvCommand extends Command
         $csvFile = Reader::from($input->getOption('file'));
         $csvFile->setHeaderOffset(0);
 
-        $header = $csvFile->getHeader();
-        $records = $csvFile->getRecordsAsObject(IncomingPaymentDto::class);
-
-        foreach ($records as $record) {
+        foreach ($csvFile->getRecords() as $record) {
             try {
-                $this->paymentIngestionService->process($record);
+                $dto = $this->serializer->denormalize($record, IncomingPaymentDto::class);
+                $this->paymentIngestionService->process($dto);
             } catch (\DomainException $exception) {
                 $highestExitCode = max($highestExitCode, $this->domainExceptionToExitCode($exception));
                 $failures[] = [

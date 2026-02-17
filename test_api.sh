@@ -3,7 +3,7 @@
 # Loan Repayment API - Automated Testing Script
 set -e
 
-API_URL="http://localhost/api/payment"
+API_URL="http://localhost:880/api/payment"
 CSV_FILE="/tmp/test_payments.csv"
 
 echo "========================================="

@@ -2,26 +2,22 @@
 
 namespace App\Application\Dto;
 
+use Symfony\Component\Serializer\Attribute\SerializedName;
+
 final class IncomingPaymentDto
 {
-//    public function __construct(
-//        private readonly string $firstname,
-//        private readonly string $lastname,
-//        private readonly string $paymentDate,
-//        private readonly string $amount,
-//        private readonly string $description,
-//        private readonly string $refId,
-//    ) {
-//    }
-
     public function __construct(
-        public string $firstname,
-        public string $lastname,
-        public string $paymentDate,
-        public string $amount,
-        public string $description,
-        public string $refId,
-    ) {}
+        #[SerializedName('payerName')]
+        private readonly string $firstname,
+        #[SerializedName('payerSurname')]
+        private readonly string $lastname,
+        private readonly string $paymentDate,
+        private readonly string $amount,
+        private readonly string $description,
+        #[SerializedName('paymentReference')]
+        private readonly string $refId,
+    ) {
+    }
 
     public function getFirstname(): string
     {
