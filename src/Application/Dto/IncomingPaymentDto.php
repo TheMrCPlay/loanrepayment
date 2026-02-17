@@ -11,8 +11,11 @@ final class IncomingPaymentDto
         private readonly string $firstname,
         #[SerializedName('payerSurname')]
         private readonly string $lastname,
+        #[SerializedName('paymentDate')]
         private readonly string $paymentDate,
+        #[SerializedName('amount')]
         private readonly string $amount,
+        #[SerializedName('description')]
         private readonly string $description,
         #[SerializedName('paymentReference')]
         private readonly string $refId,

@@ -54,6 +54,7 @@ class ImportBatchPaymentFromCsvCommand extends Command
 
         foreach ($csvFile->getRecords() as $record) {
             try {
+                /** @var IncomingPaymentDto $dto */
                 $dto = $this->serializer->denormalize($record, IncomingPaymentDto::class);
                 $this->paymentIngestionService->process($dto);
             } catch (\DomainException $exception) {
@@ -63,7 +64,7 @@ class ImportBatchPaymentFromCsvCommand extends Command
                     'error' => $exception->getMessage(),
                 ];
 
-                $this->logger->error(sprintf('%s severity: %d', $record->getRefId(), $highestExitCode));
+                $this->logger->error(sprintf('%s severity: %d, message: %s', $record['paymentReference'], $highestExitCode, $exception->getMessage()));
 
                 continue;
             } catch (\Exception $exception) {
@@ -73,12 +74,12 @@ class ImportBatchPaymentFromCsvCommand extends Command
                     'error' => $exception->getMessage(),
                 ];
 
-                $this->logger->error(sprintf('%s severity: %d', $record->getRefId(), $highestExitCode));
+                $this->logger->error(sprintf('%s severity: %d, message: %s', $record['paymentReference'], $highestExitCode, $exception->getMessage()));
 
                 continue;
             }
 
-            $this->logger->info($record->getRefId() . ' OK');
+            $this->logger->info($record['paymentReference'] . ' OK');
         }
 
         if ($failures) {
