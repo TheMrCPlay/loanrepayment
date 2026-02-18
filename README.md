@@ -27,21 +27,63 @@
 ```
 src/
 ├── Application/          # Слой приложения
-│   ├── Dto/             # Объекты передачи данных
-│   ├── Notification/    # Уведомления и сообщения
-│   └── Service/         # Бизнес-логика приложения
-├── Command/             # Консольные команды
+│   ├── Dto/
+│   │   └── IncomingPaymentDto.php
+│   ├── Notification/
+│   │   ├── NotificationDispatcher.php
+│   │   └── Message/
+│   │       └── FailedPaymentsReport.php
+│   └── Service/
+│       └── PaymentIngestionService.php
+├── Command/
 │   ├── ImportBatchPaymentFromCsvCommand.php
 │   └── PaymentReportByDateCommand.php
-├── Controller/          # REST контроллеры
+├── Controller/
 │   └── PaymentController.php
-└── Domain/              # Бизнес-логика (domain-driven)
-    ├── Assignment/      # Логика назначений платежей
-    ├── Entity/          # Доменные модели
-    ├── Enum/            # Перечисления
-    ├── Event/           # События
-    ├── Exception/       # Пользовательские исключения
-    └── Service/         # Доменные сервисы
+├── Domain/
+│   ├── Assignment/
+│   │   └── AssignmentOutcome.php
+│   ├── Entity/
+│   │   ├── Customer.php
+│   │   ├── Loan.php
+│   │   ├── Payment.php
+│   │   └── PaymentOrder.php
+│   ├── Enum/
+│   │   ├── LoanState.php
+│   │   ├── PaymentOrderState.php
+│   │   └── PaymentState.php
+│   ├── Event/
+│   │   ├── LoanFullyPaid.php
+│   │   ├── PaymentReceived.php
+│   │   └── RefundCreated.php
+│   ├── Exception/
+│   │   ├── DuplicatePaymentException.php
+│   │   ├── InvalidDateException.php
+│   │   ├── LoanNotFoundException.php
+│   │   └── NegativeAmountException.php
+│   └── Service/
+│       └── PaymentAssignmentService.php
+└── Infrastructure/
+    ├── Entity/
+    │   ├── LoanEntity.php
+    │   ├── PaymentEntity.php
+    │   └── PaymentOrderEntity.php
+    ├── Fixtures/
+    │   └── LoanFixtures.php
+    ├── Mapper/
+    │   ├── LoanMapper.php
+    │   ├── PaymentMapper.php
+    │   └── PaymentOrderMapper.php
+    ├── Notification/
+    │   └── Handler/
+    │       ├── SendFailedPaymentsReportHandler.php
+    │       ├── SendLoanFullyPaidNotificationHandler.php
+    │       ├── SendPaymentReceivedNotificationHandler.php
+    │       └── SendRefundCreatedNotificationHandler.php
+    └── Repository/
+        ├── LoanRepository.php
+        ├── PaymentOrderRepository.php
+        └── PaymentRepository.php
 ```
 
 ## 🚀 Быстрый старт
